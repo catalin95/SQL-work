@@ -1,0 +1,79 @@
+ALTER  PROCEDURE [dbo].[udpHold-OUT_bak0516]
+@xmlUnitSN text = null, 
+ @xmlSerialNumber text = null,
+@xmlProdOrder text = null,
+@xmlPart text = null,
+@xmlPackages text = null,
+@xmlStation text = null,
+@EmployeeID int = 0,
+@xmlExtraData text = null,
+@SNOutput varchar(200) = null output
+
+AS
+begin
+       declare @UID as int
+       declare @SN as varchar(200)
+       declare @iDoc as int
+       declare @erg as int
+       declare @curtime as datetime
+    declare @ret as int
+    declare @UnitStateID as int
+    declare @StationID as int
+    declare @lastid as int
+
+       /*---------------------------------------------------------------------------------------------------------------------     
+       Get UnitID and Serial Number
+       ---------------------------------------------------------------------------------------------------------------------*/          
+
+       exec @erg = uspXMLUnit @xmlUnitSN, @UID output
+       select @SN = [value] from ffserialnumber(nolock) where UnitID = @UID and serialnumbertypeid = 0
+    select @curTime = getdate()
+
+       SELECT     TOP (1) @lastID = h.ID
+       FROM        ffHistory h INNER JOIN
+                  ffSerialNumber s ON h.UnitID = s.UnitID
+       WHERE     (s.Value = @SN) AND (h.UnitStateID = 6010 
+                                                          OR h.UnitStateID = 6020 
+                                                          OR h.UnitStateID = 6030 
+                                                          OR h.UnitStateID = 6040 
+                                                          OR h.UnitStateID = 6050 
+                                                          OR h.UnitStateID = 6012 
+                                                          OR h.UnitStateID = 6060) AND (s.SerialNumberTypeID = 0)
+       ORDER BY  h.ExitTime DESC
+
+if (@lastID is not null)
+  BEGIN
+
+    SELECT   h.ID, h.UnitID, h.UnitStateID, h.StationID INTO #DEMO
+    FROM       ffHistory AS h INNER JOIN
+               ffSerialNumber AS s ON h.UnitID = s.UnitID
+    WHERE      (s.Value = @SN) AND h.ID<@lastID
+    ORDER BY   h.ID DESC
+
+    DECLARE MyCursor CURSOR
+      LOCAL STATIC READ_ONLY FOR 
+    SELECT  UnitStateID, StationID from #DEMO
+
+    open MyCursor
+    FETCH RELATIVE 1 FROM MyCursor into @UnitStateID, @StationID
+
+    close MyCursor
+    deallocate MyCursor
+    drop table #DEMO
+    
+    exec @ret = dbo.uspUNTSetNextState
+       @UID,
+       @UnitStateID, --@forcedNextStateID,
+       NULL, --@RouteID
+       NULL, --@StateDescr
+       @StationID,
+       @EmployeeID,
+       @curTime,
+       @curTime
+    
+ --   exec uspUNTSetUnitStatus @UID, 'Processing', @StationID, @EmployeeID, @curTime 
+
+       return 900000100 --Serial Number-ul a fost deblocat si mutat in statia anterioara blocarii!!
+END
+
+end --Procedure
