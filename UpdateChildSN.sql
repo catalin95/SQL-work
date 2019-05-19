@@ -1,6 +1,6 @@
 ﻿use Database_name
 go
-/****** Object:  StoredProcedure [dbo].[UpdateChildSerialNumber]    Script Date: 4/23/2019 10:53:05 AM ******/
+/****** Object:  storedprocedure dbo.UpdateChildSN
 set ansi_nulls on
 go
 set quoted_identifier on
