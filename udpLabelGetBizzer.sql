@@ -1,6 +1,6 @@
-﻿USE [Database_name]
+﻿USE Database_name
 GO
-/****** Object:  StoredProcedure [dbo].[udpLabelGetBizzer]    Script Date: 4/23/2019 10:45:44 AM ******/
+/****** Object:  StoredProcedure [dbo].[udpLabelGetBizzer]    
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -10,7 +10,7 @@ GO
    Description: This SP should return any child SN scanned if it is from any family that has in his description 'x = any searched info'; if this condition is not met should return the scanned SN
 				If by any means the scanned SN is a parent that has any child that if from any family that has in his description "x", should return the specific child SN */
 
-ALTER procedure [dbo].[udpLabelGetBizzer]
+ALTER procedure dbo.Label
 
 (
 @Label varchar(200),
