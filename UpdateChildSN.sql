@@ -10,15 +10,15 @@ go
    Description: Updates any child serial number scanned */
 
 alter procedure dbo.UpdateChildSN
-@xmlUnitSN text,
+@xmlSN text,
 @xmlString text = null,
-@xmlSN text = null,
+@xmlS text = null,
 @xmlPO text = null,
-@xmlPart text = null,
-@xmlPackages text = null, 
-@xmlStation text = null, 
+@xmlP text = null,
+@xmlPac text = null, 
+@xmlS text = null, 
 @EmployeeID int = null,
-@xmlExtraData text = null, 
+@xmlE text = null, 
 @SNOutput varchar(200) = null
 
 as 
@@ -28,7 +28,7 @@ declare @ID int
 declare @UnitID int
 declare @Serial varchar(max)
 
-exec uspXMLUnit @xmlString, @ID = @UnitID
+exec uspXMLU @xmlString, @ID = @UnitID
 
 if @UnitID in(select ChildID from dbo.ffComponent where ChildID = @UnitID)
 begin
