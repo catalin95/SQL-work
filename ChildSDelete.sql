@@ -12,14 +12,14 @@ go
 -- =============================================
 
 alter procedure dbo.ChildSDelete
-@xmlUnitSN text,
+@xmlN text,
 @xmlSN text = null,
-@xmlPO text = null,
-@xmlPart text = null,
-@xmlPackages text = null,
-@xmlStation text = null,
-@EmployeeID int = 0,
-@xmlExtraData text = null,
+@xmlP text = null,
+@xmlPa text = null,
+@xmlPac text = null,
+@xmlS text = null,
+@Employee int = 0,
+@xmlE text = null,
 @SNOutput varchar(200) = null output
 
 as
@@ -32,7 +32,7 @@ declare @Old_parentID int
 declare @Old_parent_SN varchar(max)
 declare @Old_parent_PN varchar(max)
 
-exec uspxmlUnit @xmlUnitSN, @ID = @UnitID output 
+exec uspxmlU @xmlSN, @ID = @UnitID output 
 
 
 if @UnitID in (select ChildID from dbo.Component) -- if the ID of input SN is a child of any parent..
