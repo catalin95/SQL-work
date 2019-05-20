@@ -8,8 +8,8 @@ go
 /* Author: Catalin Mucica
    Description: SP for test, it verifies in history 3 output pass states and forces next route */
 
-alter procedure dbo.test_route (@xmlUnitSN text, @xmlString text = null, @xmlPO text = null, @xmlPart text = null, @xmlStation text = null, @EmployeeID int,
-							@xmlExtraData text = null, @SNOutput varchar(200) = null output)
+alter procedure dbo.test_route (@xmlSN text, @xmlString text = null, @xmlPO text = null, @xmlP text = null, @xmlS text = null, @EmployeeID int,
+							@xmlE text = null, @SNOutput varchar(200) = null output)
 as
 begin
 
@@ -22,8 +22,8 @@ declare @ExitTime date
 declare @Employee_ID int
 
 
-exec uspXMLUnit @xmlUnitSN, @ID = @UnitID output
-exec uspXMLStation  @xmlStation, @StationTypeID = @StationType_ID output
+exec uspXMLU @xmlSN, @ID = @UnitID output
+exec uspXMLS  @xmlS, @StationTypeID = @StationType_ID output
 
 set @EnterTime = getdate()
 set @ExitTime = (select convert(datetime,(select LastUpdate from dbo.ffUnit where ID = @UnitID)))
