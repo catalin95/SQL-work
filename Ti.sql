@@ -1,4 +1,4 @@
-alter procedure TimeOff (@xml1 text, @xml2 text = null, @xml3 text = null, @xml4 text = null, 
+alter procedure Ti (@xml1 text, @xml2 text = null, @xml3 text = null, @xml4 text = null, 
 						  @EID int, @xml5 text = null)
 
 as
@@ -14,7 +14,7 @@ declare @T2 int = 180
 
 exec XMLU @xml1, @UID output
 
-set @Time_of_unit = (select top(1) ExitTime from History where UID = @UID order by ExitTime desc)  --last exit time registered in History
+set @Time_of_unit = (select top(1) ExitTime from H where UID = @UID order by ExitTime desc)  --last exit time registered in History
 set @Time_to_compare_with = datediff(second, @Time_of, @Current_time)		-- difference between last time of unit from History and current time
 
 if @Time_to_compare_with between @T1 and @T2
