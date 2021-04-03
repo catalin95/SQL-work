@@ -1,3 +1,0 @@
-# SQL
-# simple procedures
-
